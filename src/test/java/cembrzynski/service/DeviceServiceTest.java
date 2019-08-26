@@ -2,6 +2,7 @@ package cembrzynski.service;
 
 
 import cembrzynski.model.Device;
+import cembrzynski.model.DeviceSearchResult;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,10 +31,12 @@ public class DeviceServiceTest {
 
     @Test
     public void shouldSearchForDecvice(){
-        List<Device> expected = Collections.singletonList(Device.builder().uid("foo").model("bar").build());
-        when(devicesRepository.search("foo")).thenReturn(expected);
+        Device device = Device.builder().uid("foo").model("bar").build();
+        DeviceSearchResult expected = DeviceSearchResult.builder().result(Collections.singletonList(device)).build();
+        when(devicesRepository.search("foo")).thenReturn(Collections.singletonList(device));
 
-        List<Device> actual = devicesRepository.search("foo");
+        DeviceSearchResult actual = underTest.searchForDevice("foo");
+
 
         Assert.assertEquals(expected, actual);
     }
