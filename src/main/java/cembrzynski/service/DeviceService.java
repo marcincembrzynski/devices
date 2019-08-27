@@ -3,8 +3,12 @@ package cembrzynski.service;
 import cembrzynski.model.Device;
 import cembrzynski.model.DeviceSearchResult;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQuery;
+import org.springframework.data.elasticsearch.core.query.SearchQuery;
 import org.springframework.stereotype.Service;
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -34,7 +38,9 @@ public class DeviceService {
     }
 
     public DeviceSearchResult searchForDevice(String query){
-        return DeviceSearchResult.builder().result(devicesRepository.search(query)).build();
+        SearchQuery searchQuery = new NativeSearchQuery(QueryBuilders.simpleQueryStringQuery(query));
+        Page<Device> page = devicesRepository.search(searchQuery);
+        return DeviceSearchResult.builder().result(page.getContent()).build();
     }
 
     private void importData() {
