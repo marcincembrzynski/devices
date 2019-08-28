@@ -49,5 +49,6 @@ public class DeviceControllerIntegrationTest {
         assertEquals(HttpStatus.OK, actual.getStatusCode());
         Device actualDevice = actual.getBody().getResult().get(0);
         assertEquals(expectedDevice, actualDevice);
+
     }
 }
